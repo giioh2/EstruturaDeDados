@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void bubbleSort(char *arr[], int n) {
+    int swapped;
+    char *temp;
+    do {
+        swapped = 0;
+        for (int i = 1; i < n; i++) {
+            if (strcmp(arr[i - 1], arr[i]) > 0) {
+                // Trocar as palavras se estiverem fora de ordem
+                temp = arr[i - 1];
+                arr[i - 1] = arr[i];
+                arr[i] = temp;
+                swapped = 1;
+            }
+        }
+    } while (swapped);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Uso: %s <nome_do_arquivo>\n", argv[0]);
+        return 1;
+    }
+
+    // Abrir o arquivo de entrada para leitura
+    FILE *inputFile = fopen(argv[1], "r");
+    if (inputFile == NULL) {
+        perror("Erro ao abrir o arquivo de entrada");
+        return 2;
+    }
+
+    // Ler as palavras do arquivo de entrada
+    char *words[1000]; // Assumindo um máximo de 1000 palavras
+    int count = 0;
+    char word[100]; // Assumindo um máximo de 100 caracteres por palavra
+
+    while (fgets(word, sizeof(word), inputFile) != NULL) {
+        // Remover o caractere de nova linha (\n) se estiver presente
+        int len = strlen(word);
+        if (len > 0 && word[len - 1] == '\n') {
+            word[len - 1] = '\0';
+        }
+        words[count] = strdup(word); // Copiar a palavra para a matriz
+        count++;
+    }
+
+    // Fechar o arquivo de entrada
+    fclose(inputFile);
+
+    // Chamar a função bubbleSort para ordenar as palavras
+    bubbleSort(words, count);
+
+    // Abrir o arquivo de saída para escrita
+    FILE *outputFile = fopen("arq_palavras_ordenado.txt", "w");
+    if (outputFile == NULL) {
+        perror("Erro ao abrir o arquivo de saída");
+        return 3;
+    }
+
+    // Escrever as palavras ordenadas no arquivo de saída
+    for (int i = 0; i < count; i++) {
+        fprintf(outputFile, "%s\n", words[i]);
+        free(words[i]); // Liberar memória alocada para a palavra
+    }
+
+    // Fechar o arquivo de saída
+    fclose(outputFile);
+
+    printf("Arquivo de saída 'arq_palavras_ordenado.txt' criado com sucesso.\n");
+
+    return 0;
+}
