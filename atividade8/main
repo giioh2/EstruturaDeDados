@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include "lista.h"
+
+int main() {
+    No* lista = criarLista();
+
+    lista_inserir_no_i(lista, 0, 'A');
+    lista_inserir_no_i(lista, 1, 'B');
+    lista_inserir_no_i(lista, 2, 'C');
+    lista_inserir_no_i(lista, 3, 'A');
+
+    printf("Existência de 'B': %d\n", lista_verificar_existencia(lista, 'B'));
+    printf("Ocorrências de 'A': %d\n", lista_verificar_ocorrencias(lista, 'A'));
+
+    printf("Lista Inversa: ");
+    lista_imprimir_inversa(lista);
+    printf("\n");
+
+    lista_remover_no_i(lista, 2);
+    lista_remover_no(lista, 'A');
+
+    liberarLista(lista);
+    return 0;
+}
